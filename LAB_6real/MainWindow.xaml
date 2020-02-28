@@ -1,0 +1,22 @@
+﻿<Window x:Class="LAB_6real.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:local="clr-namespace:LAB_6real"
+        mc:Ignorable="d"
+        Title="Чо график строишь тут?" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Height="80" Orientation="Horizontal">
+            <TextBlock Text="Введите а:" Margin="20" FontSize="28"/>
+            <TextBox x:Name="ValueA" Width="120" HorizontalAlignment="Left" Margin="20" FontSize="28" />
+            <Button Content="Построить график" Padding="10" Margin="20" Background="White" Click="Chart_Click"/>
+        </StackPanel>
+        <lvc:CartesianChart>
+            <lvc:CartesianChart.Series>
+                <lvc:LineSeries Values="{Binding Value}"/>
+            </lvc:CartesianChart.Series>
+        </lvc:CartesianChart>
+    </DockPanel>
+</Window>
