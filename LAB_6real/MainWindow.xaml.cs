@@ -60,7 +60,7 @@ namespace LAB_6real
             for (int i = 0; i < N; i++)
             {
                 sum = sum + equation.Value(x1 + i * h) * h;
-                _value = sum;
+                _value = sum; 
             }
         }
     }
