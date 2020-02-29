@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -29,18 +28,13 @@ namespace LAB_6real
         private SeriesCollection _seriesCollection;
         private string[] _labels;
         Equation _equation;
-        private IntegratorOfficial[] _integrators = new IntegratorOfficial[]
-        {
-            new IntegratorOdin(), 
-            new IntegratorDva()
-        };
+        private IntegratorOfficial[] _integrators;
 
         public IntegratorOfficial[] Integrators
         {
             get => _integrators; set => _integrators = value;
         }
-
-
+        
         public SeriesCollection SeriesCollection
         {
             get => _seriesCollection;
@@ -50,6 +44,7 @@ namespace LAB_6real
                 OnPropertyChanged();
             }
         }
+
         public string[] Labels
         {
             get => _labels;
@@ -77,30 +72,40 @@ namespace LAB_6real
         public MainWindow()
         {
             InitializeComponent();
+            _integrators = new IntegratorOfficial[]
+            {
+                new IntegratorOdin(),
+                new IntegratorDva()
+            };
+            foreach(var integrator in _integrators)
+            {
+                integrator.OnStep += WriteToFile;
+                integrator.OnFinish += Integrator_OnFinish;
+            }
             DataContext = this;
             ValueA.Focus();
         }
 
-
         private void Chart_Click(object sender, RoutedEventArgs e)
         {
-            double a = double.Parse(ValueA.Text);
+            File.WriteAllText(@"file.txt", string.Empty);
 
+
+            double a = double.Parse(ValueA.Text);
             var integrator = ComboBoxIntegrator.SelectedItem as IntegratorOfficial;
             if (integrator == null)
             {
                 MessageBox.Show("ERROR");
                 return;
             }
-
             var EquationName = ComboBoxEquation.Text;
-            if (EquationName == "sinus")
+            if (EquationName == "Sinus")
             {
                 _equation = new SinusEquation(a);
             }
-            else if (EquationName == "trapeze")
+            else if (EquationName == "Cosinus")
             {
-                _equation = new TrapezeEquation(a);
+                _equation = new CosinusEquation(a);
             }
 
             double x1 = double.Parse(X1.Text);
@@ -112,8 +117,24 @@ namespace LAB_6real
             serCollection.Add(series);
             SeriesCollection = serCollection;
 
+
             int N = Int32.Parse(ValueN.Text);
             IntegratorResult.Text = integrator.Integrate(x1, x2, _equation, N).ToString();
+        }
+
+        private void WriteToFile(object sender, IntegratorEventArgs e)
+        {
+            var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "file.txt");
+            using (StreamWriter sw = new StreamWriter(path, true, System.Text.Encoding.Default))
+            {
+                sw.WriteLine("x = " + e.X.ToString() + " f(x) = " +  e.F.ToString() + " Интеграл = " + e.Integr.ToString());
+            }
+        }
+
+        private void Integrator_OnFinish(object sender, double e)
+        {
+            MessageBox.Show($"Интеграл: {e}");
+            Process.Start("file.txt");
         }
 
         void DrawFunction(double x1, double x2, Series series)
@@ -129,7 +150,6 @@ namespace LAB_6real
                 valueArr[i] = _value;
             }
             Labels = x.Select(i => i.ToString()).ToArray();
-
             series.Values = new ChartValues<double>(valueArr);
         }
     }

@@ -2,11 +2,11 @@
 
 namespace LAB_6real
 {
-    public class TrapezeEquation : Equation
+    public class CosinusEquation : Equation
     {
         private readonly double a;
 
-        public TrapezeEquation(double a)
+        public CosinusEquation(double a)
         {
             this.a = a;
         }

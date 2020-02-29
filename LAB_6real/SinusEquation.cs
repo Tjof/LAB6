@@ -23,5 +23,4 @@ namespace LAB_6real
             return Math.Sin(a*x)/x;
         }
     }
-
 }

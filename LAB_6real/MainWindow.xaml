@@ -18,8 +18,8 @@
         <StackPanel DockPanel.Dock="Top">
             <ComboBox x:Name="ComboBoxIntegrator" ItemsSource="{Binding Integrators}"/>
             <ComboBox x:Name="ComboBoxEquation">
-                <ComboBoxItem Content="sinus"/>
-                <ComboBoxItem Content="trapeze"/>
+                <ComboBoxItem Content="Sinus"/>
+                <ComboBoxItem Content="Cosinus"/>
             </ComboBox>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Height="50" Orientation="Horizontal">

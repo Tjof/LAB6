@@ -63,9 +63,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IntegratorDva.cs" />
+    <Compile Include="IntegratorEventArgs.cs" />
     <Compile Include="IntegratorOfficial.cs" />
     <Compile Include="SinusEquation.cs" />
-    <Compile Include="TrapezeEquation.cs" />
+    <Compile Include="CosinusEquation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
