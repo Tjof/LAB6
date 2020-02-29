@@ -6,7 +6,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:LAB_6real"
         mc:Ignorable="d"
-        Title="Чо график строишь тут?" Height="450" Width="800">
+        Title="Чо график строишь тут?" Height="550" Width="800">
     <DockPanel >
         <StackPanel  DockPanel.Dock="Top" Orientation="Horizontal">
             <TextBlock Text="Введите а:" Margin="10,30,10,30" FontSize="18"/>
@@ -16,11 +16,19 @@
             <Button Content="Построить график" Padding="10" Margin="20" Background="White" Click="Chart_Click" IsDefault="True"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top">
-            <ComboBox x:Name="ComboBox" ItemsSource="{Binding Integrators}"/>
+            <ComboBox x:Name="ComboBoxIntegrator" ItemsSource="{Binding Integrators}"/>
             <ComboBox x:Name="ComboBoxEquation">
                 <ComboBoxItem Content="sinus"/>
                 <ComboBoxItem Content="trapeze"/>
             </ComboBox>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Height="50" Orientation="Horizontal">
+            <TextBlock Text="Результат интегрирования:" Margin="10" FontSize="21"/>
+            <TextBlock x:Name="IntegratorResult" Width="auto"/>
+            <TextBlock Text="x1 = " Margin="10" FontSize="21"/>
+            <TextBox x:Name="X1" Width="80"/>
+            <TextBlock Text="x2 = " Margin="10" FontSize="21"/>
+            <TextBox x:Name="X2" Width="80"/>
         </StackPanel>
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" DockPanel.Dock="Bottom">
             <lvc:CartesianChart.AxisY>

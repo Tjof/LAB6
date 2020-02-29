@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -84,39 +85,52 @@ namespace LAB_6real
         private void Chart_Click(object sender, RoutedEventArgs e)
         {
             double a = double.Parse(ValueA.Text);
-            if(ComboBoxEquation.SelectedItem.ToString() == "sinus")
+
+            var integrator = ComboBoxIntegrator.SelectedItem as IntegratorOfficial;
+            if (integrator == null)
+            {
+                MessageBox.Show("ERROR");
+                return;
+            }
+
+            var EquationName = ComboBoxEquation.Text;
+            if (EquationName == "sinus")
             {
                 _equation = new SinusEquation(a);
             }
-            else if (ComboBoxEquation.SelectedItem.ToString() == "trapeze")
+            else if (EquationName == "trapeze")
             {
                 _equation = new TrapezeEquation(a);
             }
-            double x1 = 10, x2 = 30;
+
+            double x1 = double.Parse(X1.Text);
+            double x2 = double.Parse(X2.Text);
+
             var serCollection = new SeriesCollection();
             LineSeries series = new LineSeries();
-            DrawFunction(x1, x2, series, _equation);
+            DrawFunction(x1, x2, series);
             serCollection.Add(series);
             SeriesCollection = serCollection;
+
+            int N = Int32.Parse(ValueN.Text);
+            IntegratorResult.Text = integrator.Integrate(x1, x2, _equation, N).ToString();
         }
 
-        void DrawFunction(double x1, double x2, Series series, Equation equation)
+        void DrawFunction(double x1, double x2, Series series)
         {
             int N = Int32.Parse(ValueN.Text);
             double[] valueArr = new double[N];
             double h = (x2 - x1) / N;
             double[] x = new double[N];
-            equation = _equation;
             for (int i = 0; i < N; i++)
             {
-                _value = equation.Value(x1 + i * h);
+                _value = _equation.Value(x1 + i * h);
                 x[i] = (x1 + i * h);
                 valueArr[i] = _value;
             }
             Labels = x.Select(i => i.ToString()).ToArray();
 
             series.Values = new ChartValues<double>(valueArr);
-
         }
     }
 }

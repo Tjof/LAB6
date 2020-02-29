@@ -17,7 +17,7 @@ namespace LAB_6real
         /// </summary>
         /// <param name="x1">левая граница интегрирования</param>
         /// <param name="x2">правая граница интегрирования</param>
-        public override double Integrate(double x1, double x2, Equation equation)
+        public override double Integrate(double x1, double x2, Equation equation, int N)
         {
             //проверяем допустимость параметров:
             if (equation == null)
@@ -29,7 +29,6 @@ namespace LAB_6real
              * Считаем значение функции в точке, умножаем на ширину интервала.
              * Площадь полученного прямоугольника приблизительно равна значению интеграла на этом отрезке
              * суммируем значения площадей, получаем значение интеграла на отрезке [X1;X2]*/
-            int N = 100;    //количество интервалов разбиения
             //определяем ширину интервала:
             double h = (x2 - x1) / N;
             double sum = 0; //"накопитель" для значения интеграла
