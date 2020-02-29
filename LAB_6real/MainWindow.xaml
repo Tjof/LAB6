@@ -7,16 +7,28 @@
         xmlns:local="clr-namespace:LAB_6real"
         mc:Ignorable="d"
         Title="Чо график строишь тут?" Height="450" Width="800">
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Height="80" Orientation="Horizontal">
-            <TextBlock Text="Введите а:" Margin="20" FontSize="28"/>
-            <TextBox x:Name="ValueA" Width="120" HorizontalAlignment="Left" Margin="20" FontSize="28" />
-            <Button Content="Построить график" Padding="10" Margin="20" Background="White" Click="Chart_Click"/>
+    <DockPanel >
+        <StackPanel  DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock Text="Введите а:" Margin="10,30,10,30" FontSize="18"/>
+            <TextBox x:Name="ValueA" Width="80" HorizontalAlignment="Left" Margin="20" FontSize="28" />
+            <TextBlock Text="Введите N:" Margin="10,30,10,30" FontSize="18"/>
+            <TextBox x:Name="ValueN" Width="80" HorizontalAlignment="Left" Margin="20" FontSize="28" />
+            <Button Content="Построить график" Padding="10" Margin="20" Background="White" Click="Chart_Click" IsDefault="True"/>
         </StackPanel>
-        <lvc:CartesianChart>
-            <lvc:CartesianChart.Series>
-                <lvc:LineSeries Values="{Binding Value}"/>
-            </lvc:CartesianChart.Series>
+        <StackPanel DockPanel.Dock="Top">
+            <ComboBox x:Name="ComboBox" ItemsSource="{Binding Integrators}"/>
+            <ComboBox x:Name="ComboBoxEquation">
+                <ComboBoxItem Content="sinus"/>
+                <ComboBoxItem Content="trapeze"/>
+            </ComboBox>
+        </StackPanel>
+        <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" DockPanel.Dock="Bottom">
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Y" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="X" Labels="{Binding Labels}"></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
     </DockPanel>
 </Window>

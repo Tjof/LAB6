@@ -9,14 +9,15 @@ namespace LAB_6real
     /// <summary>
     /// Класс, представляющий квадратное уравнение
     /// </summary>
-    public class QuadEquation : Equation
+    public class SinusEquation : Equation
     {
         private readonly double a;
 
-        public QuadEquation(double a)
+        public SinusEquation(double a)
         {
             this.a = a;
         }
+
         public override double Value(double x)
         {
             return Math.Sin(a*x)/x;

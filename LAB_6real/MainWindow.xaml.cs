@@ -1,7 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace LAB_6real
 {
@@ -19,49 +24,99 @@ namespace LAB_6real
         #endregion
 
         private double _value;
-
-        public double Value
+        double[] _valueArr = null;
+        private SeriesCollection _seriesCollection;
+        private string[] _labels;
+        Equation _equation;
+        private IntegratorOfficial[] _integrators = new IntegratorOfficial[]
         {
-            get
-            {
-                return _value;
-            }
+            new IntegratorOdin(), 
+            new IntegratorDva()
+        };
+
+        public IntegratorOfficial[] Integrators
+        {
+            get => _integrators; set => _integrators = value;
+        }
+
+
+        public SeriesCollection SeriesCollection
+        {
+            get => _seriesCollection;
             set
             {
-                _value = value;
+                _seriesCollection = value;
                 OnPropertyChanged();
             }
         }
+        public string[] Labels
+        {
+            get => _labels;
+            set
+            {
+                _labels = value;
+                OnPropertyChanged();
+            }
+        }
+        public Func<double, string> YFormatter { get; set; }
+
+        public double[] Value
+        {
+            get
+            {
+                return _valueArr;
+            }
+            set
+            {
+                _valueArr = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
+            ValueA.Focus();
         }
+
 
         private void Chart_Click(object sender, RoutedEventArgs e)
         {
             double a = double.Parse(ValueA.Text);
-            Equation equation = new QuadEquation(a);    //создаем объект класса "кв. уравнение"
-            //Integrator i1 = new Integrator(equation); //создаем интегратор для этого уравнения
-            //double integrValue = i1.Integrate(10, 20); //вызываем интегрирование на интвервале 10;30
-            //проверяем допустимость параметров:
-            double x1 = 10, x2 = 30;
-            if (x1 >= x2)
+            if(ComboBoxEquation.SelectedItem.ToString() == "sinus")
             {
-                MessageBox.Show("Error: x1 >= x2");
+                _equation = new SinusEquation(a);
             }
-            /* для интегирования разобъем исходный отрезок на 100 точек. 
-             * Считаем значение функции в точке, умножаем на ширину интервала.
-             * Площадь полученного прямоугольника приблизительно равна значению интеграла на этом отрезке
-             * суммируем значения площадей, получаем значение интеграла на отрезке [X1;X2]*/
-            int N = 100;    //количество интервалов разбиения
-            //определяем ширину интервала:
+            else if (ComboBoxEquation.SelectedItem.ToString() == "trapeze")
+            {
+                _equation = new TrapezeEquation(a);
+            }
+            double x1 = 10, x2 = 30;
+            var serCollection = new SeriesCollection();
+            LineSeries series = new LineSeries();
+            DrawFunction(x1, x2, series, _equation);
+            serCollection.Add(series);
+            SeriesCollection = serCollection;
+        }
+
+        void DrawFunction(double x1, double x2, Series series, Equation equation)
+        {
+            int N = Int32.Parse(ValueN.Text);
+            double[] valueArr = new double[N];
             double h = (x2 - x1) / N;
-            double sum = 0; //"накопитель" для значения интеграла
+            double[] x = new double[N];
+            equation = _equation;
             for (int i = 0; i < N; i++)
             {
-                sum = sum + equation.Value(x1 + i * h) * h;
-                _value = sum; 
+                _value = equation.Value(x1 + i * h);
+                x[i] = (x1 + i * h);
+                valueArr[i] = _value;
             }
+            Labels = x.Select(i => i.ToString()).ToArray();
+
+            series.Values = new ChartValues<double>(valueArr);
+
         }
     }
 }

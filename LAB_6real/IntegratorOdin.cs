@@ -6,29 +6,24 @@ using System.Threading.Tasks;
 
 namespace LAB_6real
 {
-    public class Integrator
+    public class IntegratorOdin : IntegratorOfficial
     {
-        private readonly Equation equation;
-        /// <summary>
-        /// Конструктор класса "интегратор"
-        /// </summary>
-        /// <param name="equation">интегрируемое уравнение</param>
-        public Integrator(Equation equation)
+        public override string ToString()
         {
-            //проверяем допустимость параметров:
-            if (equation == null)
-            {
-                throw new ArgumentNullException();
-            }
-            this.equation = equation;
+            return "Метод прямоугольников";
         }
         /// <summary>
         /// Функция интегрирования
         /// </summary>
         /// <param name="x1">левая граница интегрирования</param>
         /// <param name="x2">правая граница интегрирования</param>
-        public double Integrate(double x1, double x2)
+        public override double Integrate(double x1, double x2, Equation equation)
         {
+            //проверяем допустимость параметров:
+            if (equation == null)
+            {
+                throw new ArgumentNullException();
+            }
             //проверяем допустимость параметров:
             if (x1 >= x2)
             {
@@ -44,7 +39,7 @@ namespace LAB_6real
             double sum = 0; //"накопитель" для значения интеграла
             for (int i = 0; i < N; i++)
             {
-                sum = sum + equation.Value(x1 + i * h) * h;
+                sum += equation.Value(x1 + i * h) * h;
             }
             return sum;
         }
